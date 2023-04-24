@@ -19,7 +19,7 @@ int main(){
 
 
         // Create window with SDL_Renderer graphics context
-        SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_BORDERLESS | SDL_WINDOW_ALWAYS_ON_TOP | SDL_WINDOW_POPUP_MENU);
+        SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_POPUP_MENU);
         SDL_Window* window = SDL_CreateWindow("Dikr", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 300, 90, window_flags);
         SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
         if (renderer == nullptr)
@@ -49,7 +49,7 @@ int main(){
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
 
-        SDL_Delay(5000);
+        SDL_Delay(3000);
 
     }
     SDL_Quit();
