@@ -15,12 +15,20 @@ int main(){
 #endif
     int counter = 2;
 
+    SDL_DisplayMode DM;
+    SDL_GetCurrentDisplayMode(0, &DM);
+    auto screen_width = DM.w;
+    auto screen_height = DM.h;
+
+    int window_width = 100;
+    int window_height = 50;
+
     while(counter > 0){
 
 
         // Create window with SDL_Renderer graphics context
         SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_POPUP_MENU);
-        SDL_Window* window = SDL_CreateWindow("Dikr", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 300, 90, window_flags);
+        SDL_Window* window = SDL_CreateWindow("Dikr", screen_width - window_width, screen_height * 2 / 8, window_width, window_height, window_flags);
         SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
         if (renderer == nullptr)
         {
@@ -34,7 +42,7 @@ int main(){
                 if (event.type == SDL_QUIT) {
                     running = false;
                 }
-                if (SDL_MOUSEBUTTONDOWN == event.type && SDL_BUTTON_RIGHT == event.button.button){
+                if (SDL_MOUSEBUTTONDOWN == event.type){
                     running = false;    
                 }
             }
