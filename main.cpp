@@ -34,7 +34,7 @@ int main(){
                 if (event.type == SDL_QUIT) {
                     running = false;
                 }
-                if (SDL_MOUSEBUTTONDOWN == event.type && SDL_BUTTON_LEFT == event.button.button){
+                if (SDL_MOUSEBUTTONDOWN == event.type && SDL_BUTTON_RIGHT == event.button.button){
                     running = false;    
                 }
             }
