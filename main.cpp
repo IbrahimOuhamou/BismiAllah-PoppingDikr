@@ -1,11 +1,19 @@
 // بسم الله الرحمن الرحيم
 
 #include <SDL.h>
+#include <SDL_ttf.h>
+
+long unsigned int cooldown = 3000;
 
 int main(){
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
     {
         printf("Error: %s\n", SDL_GetError());
+        return -1;
+    }
+
+    if(TTF_Init() == -1){
+        printf("Error: %s\n", TTF_GetError());
         return -1;
     }
 
@@ -20,8 +28,8 @@ int main(){
     auto screen_width = DM.w;
     auto screen_height = DM.h;
 
-    int window_width = 100;
-    int window_height = 50;
+    int window_width = 200;
+    int window_height = 75;
 
     while(counter > 0){
 
@@ -35,8 +43,10 @@ int main(){
             SDL_Log("Error creating SDL_Renderer!");
             return 0;
         }
-        SDL_Event event;
+
         bool running = true;
+
+        SDL_Event event;
         while(running){
             while(SDL_PollEvent(&event)){
                 if (event.type == SDL_QUIT) {
@@ -57,7 +67,9 @@ int main(){
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
 
-        SDL_Delay(3000);
+        if(counter > 0){
+            SDL_Delay(cooldown);
+        }
 
     }
     SDL_Quit();
