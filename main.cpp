@@ -32,7 +32,7 @@ int main(){
     int window_height = 75;
 
     short int border = 5;
-    SDL_Rect * BismiAllahRect = new SDL_Rect{border, border, window_width - (2 * border), window_height - (2 * border)};
+    SDL_Rect BismiAllahRect = SDL_Rect{border, border, window_width - (2 * border), window_height - (2 * border)};
     
     while(counter > 0){
 
@@ -65,8 +65,8 @@ int main(){
             SDL_RenderClear(renderer);
 
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-            SDL_RenderDrawRect(renderer, BismiAllahRect);
-            SDL_RenderFillRect(renderer, BismiAllahRect);
+            SDL_RenderDrawRect(renderer, &BismiAllahRect);
+            SDL_RenderFillRect(renderer, &BismiAllahRect);
             SDL_RenderPresent(renderer);
         }
         counter--;
@@ -80,7 +80,6 @@ int main(){
 
     }
 
-    delete BismiAllahRect;
     SDL_Quit();
     return 0;
 }
