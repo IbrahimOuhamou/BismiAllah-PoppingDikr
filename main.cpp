@@ -4,11 +4,12 @@
 #include <SDL_ttf.h>
 #include <string>
 
+
 unsigned int cooldown = 3;
 
 // "/usr/share/fonts/truetype/ubuntu/UbuntuMono-RI.ttf"
 
-std::string DikrList[2] = {"Bismi Allah","Allah Akbar"};
+std::string DikrList[5] = {"Bismi Allah", "Allah Akbar", "Alhamdo li Allah", "Astaghforo Allah", "La ilaha illa Allah"};
 
 
 int main(){
@@ -43,6 +44,8 @@ int main(){
     TTF_Font * Mono = TTF_OpenFont("/usr/share/fonts/truetype/ubuntu/UbuntuMono-BI.ttf", 67);
     SDL_Color dikr_color = SDL_Color{0, 0, 0};
     
+    srand(time(NULL));
+
     while(counter > 0){
 
 
@@ -56,7 +59,7 @@ int main(){
             return 0;
         }
 
-        SDL_Surface * Surface_Dikr = TTF_RenderText_Solid(Mono, DikrList[0].c_str(), dikr_color);
+        SDL_Surface * Surface_Dikr = TTF_RenderUTF8_Solid(Mono, DikrList[rand() % 5].c_str(), dikr_color);
         SDL_Texture * Dikr = SDL_CreateTextureFromSurface(renderer, Surface_Dikr);
         SDL_Rect Dikr_rect = SDL_Rect{border * 2, border * 2, window_width - (border * 4), window_height - (border * 4)};
 
