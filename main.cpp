@@ -2,8 +2,14 @@
 
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <string>
 
-long unsigned int cooldown = 3000;
+unsigned int cooldown = 3;
+
+// "/usr/share/fonts/truetype/ubuntu/UbuntuMono-RI.ttf"
+
+std::string DikrList[2] = {"Bismi Allah","Allah Akbar"};
+
 
 int main(){
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0)
@@ -34,18 +40,25 @@ int main(){
     short int border = 5;
     SDL_Rect BismiAllahRect = SDL_Rect{border, border, window_width - (2 * border), window_height - (2 * border)};
     
+    TTF_Font * Mono = TTF_OpenFont("/usr/share/fonts/truetype/ubuntu/UbuntuMono-BI.ttf", 67);
+    SDL_Color dikr_color = SDL_Color{0, 0, 0};
+    
     while(counter > 0){
 
 
         // Create window with SDL_Renderer graphics context
         SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_POPUP_MENU);
-        SDL_Window* window = SDL_CreateWindow("Dikr", screen_width - window_width, screen_height * 2 / 8, window_width, window_height, window_flags);
+        SDL_Window* window = SDL_CreateWindow("Dikr", screen_width - window_width, screen_height * 1 / 8, window_width, window_height, window_flags);
         SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
         if (renderer == nullptr)
         {
             SDL_Log("Error creating SDL_Renderer!");
             return 0;
         }
+
+        SDL_Surface * Surface_Dikr = TTF_RenderText_Solid(Mono, DikrList[0].c_str(), dikr_color);
+        SDL_Texture * Dikr = SDL_CreateTextureFromSurface(renderer, Surface_Dikr);
+        SDL_Rect Dikr_rect = SDL_Rect{border * 2, border * 2, window_width - (border * 4), window_height - (border * 4)};
 
         bool running = true;
 
@@ -60,22 +73,29 @@ int main(){
                 }
             }
             
-
+            //Clear background
             SDL_SetRenderDrawColor(renderer,255,255,0,0);
             SDL_RenderClear(renderer);
 
+            //Draw inner box
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
             SDL_RenderDrawRect(renderer, &BismiAllahRect);
             SDL_RenderFillRect(renderer, &BismiAllahRect);
+            
+            //Draw Dikr
+            SDL_RenderCopy(renderer, Dikr, NULL, &Dikr_rect);
+
             SDL_RenderPresent(renderer);
         }
         counter--;
 
+        SDL_FreeSurface(Surface_Dikr);
+        SDL_DestroyTexture(Dikr);
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
 
         if(counter > 0){
-            SDL_Delay(cooldown);
+            SDL_Delay(cooldown * 1000);
         }
 
     }
