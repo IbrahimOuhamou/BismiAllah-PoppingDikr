@@ -8,10 +8,10 @@ sdl_dep = [
     dependency('sdl2_ttf')
 ]
 
-files = [
-    'main.cpp'
+Dikr_files = [
+    'Dikr_exe/main.cpp'
 ]
 
 executable('BismiAllah',
-            files,
+            Dikr_files,
             dependencies: sdl_dep)
