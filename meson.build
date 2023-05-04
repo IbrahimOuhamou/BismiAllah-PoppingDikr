@@ -15,3 +15,9 @@ Dikr_files = [
 executable('BismiAllah',
             Dikr_files,
             dependencies: sdl_dep)
+
+
+Settings_files = [
+    'settings_exe/main.cpp'
+]
+

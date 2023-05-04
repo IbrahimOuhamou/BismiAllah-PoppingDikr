@@ -28,7 +28,8 @@ int main(){
 #ifdef SDL_HINT_IME_SHOW_UI
     SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
 #endif
-    int counter = 2;
+
+    int show_counter = 2;
 
     SDL_DisplayMode DM;
     SDL_GetCurrentDisplayMode(0, &DM);
@@ -46,7 +47,7 @@ int main(){
     
     srand(time(NULL));
 
-    while(counter > 0){
+    while(show_counter > 0){
 
 
         // Create window with SDL_Renderer graphics context
@@ -75,7 +76,6 @@ int main(){
                     running = false;    
                 }
             }
-            
             //Clear background
             SDL_SetRenderDrawColor(renderer,255,255,0,0);
             SDL_RenderClear(renderer);
@@ -89,20 +89,20 @@ int main(){
             SDL_RenderCopy(renderer, Dikr, NULL, &Dikr_rect);
 
             SDL_RenderPresent(renderer);
-        }
-        counter--;
+            }
+        show_counter--;
 
         SDL_FreeSurface(Surface_Dikr);
         SDL_DestroyTexture(Dikr);
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
 
-        if(counter > 0){
+        if(show_counter > 0){
             SDL_Delay(cooldown * 1000);
         }
 
+    
     }
-
     SDL_Quit();
     return 0;
-}
+    }
