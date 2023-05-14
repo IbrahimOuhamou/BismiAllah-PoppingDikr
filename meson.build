@@ -16,6 +16,9 @@ executable('BismiAllah',
             Dikr_files,
             dependencies: sdl_dep)
 
+executable('BismiAllah1',
+            'Dikr_exe/main1.cpp',
+            dependencies: sdl_dep)
 
 Settings_files = [
     'settings_exe/main.cpp'
