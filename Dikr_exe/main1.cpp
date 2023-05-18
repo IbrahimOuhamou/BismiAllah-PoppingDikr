@@ -6,6 +6,7 @@
 const char* Dikr_list[][3] = {"بسم الله", "سبحن الله", "الله أكبر"};
 
 int cooldown_time = 3;
+int cooldown_time_debug = 3;
 int show_counter = 2; // for debugging
 bool always_show = false; // for debugging
 int screen_width = 0, screen_heigth = 0;
@@ -16,7 +17,7 @@ SDL_Renderer *renderer = nullptr;
 
 void init();
 void pop_dikr();
-void clear();
+void clean_up();
 void cooldown();
 
 int main(){
@@ -42,9 +43,9 @@ int main(){
         
         show_counter--;
         
-        clear();
+        clean_up();
 
-        SDL_Delay(cooldown_time * 1000);
+        SDL_Delay(cooldown_time_debug * 1000);
     }
 
 
@@ -71,11 +72,15 @@ void pop_dikr(){
     SDL_Delay(2 * 1000);
 }
 
-void clear(){
+void clean_up(){
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 }
 
 void cooldown(){
-
+    int waited_time = 0;
+    while(waited_time < cooldown_time){
+        SDL_Delay(60 * 1000);
+        waited_time++;
+    }
 }
