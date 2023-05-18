@@ -68,8 +68,21 @@ void pop_dikr(){
         SDL_Log("Error creating SDL_Renderer!");
     }
 
-    SDL_RenderPresent(renderer);
-    SDL_Delay(2 * 1000);
+
+
+
+
+
+    bool running = true;
+
+    SDL_Event w_event;
+    while(running){
+        while(SDL_PollEvent()){
+            if(w_event.type == SDL_QUIT || w_event.type == SDL_MOUSEBUTTONDOWN){
+                running = false;
+            }
+        }
+    }
 }
 
 void clean_up(){
