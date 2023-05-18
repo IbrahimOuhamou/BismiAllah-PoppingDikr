@@ -17,6 +17,7 @@ SDL_Renderer *renderer = nullptr;
 void init();
 void pop_dikr();
 void clear();
+void cooldown();
 
 int main(){
 
@@ -73,4 +74,8 @@ void pop_dikr(){
 void clear(){
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+}
+
+void cooldown(){
+
 }
