@@ -77,7 +77,7 @@ void pop_dikr(){
 
     SDL_Event w_event;
     while(running){
-        while(SDL_PollEvent()){
+        while(SDL_PollEvent(&w_event)){
             if(w_event.type == SDL_QUIT || w_event.type == SDL_MOUSEBUTTONDOWN){
                 running = false;
             }

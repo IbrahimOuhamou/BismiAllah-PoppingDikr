@@ -9,6 +9,7 @@ unsigned int cooldown = 3;
 
 // "/usr/share/fonts/truetype/ubuntu/UbuntuMono-RI.ttf"
 // "/home/ibrahimo/Downloads/Noto_Sans_Arabic/NotoSansArabic-VariableFont_wdth,wght.ttf"
+// "/usr/share/fonts/truetype/kacst/KacstPoster.ttf"
 
 std::string DikrList[5] = {"Bismi Allah", "Allah Akbar", "Alhamdo li Allah", "Astaghfiro Allah", "La ilaha illa Allah"};
 std::vector<const char*> ArDikrVec = {"سبحن الله", "الله أكبر"};
@@ -39,13 +40,13 @@ int main(){
     auto screen_width = DM.w;
     auto screen_height = DM.h;
 
-    int window_width = 200;
-    int window_height = 75;
+    int window_width = 250;
+    int window_height = 50;
 
     short int border = 5;
     SDL_Rect BismiAllahRect = SDL_Rect{border, border, window_width - (2 * border), window_height - (2 * border)};
     
-    TTF_Font * Mono = TTF_OpenFont("/home/ibrahimo/Downloads/Noto_Sans_Arabic/NotoSansArabic-VariableFont_wdth,wght.ttf", 67);
+    TTF_Font * Mono = TTF_OpenFont("/usr/share/fonts/truetype/ubuntu/UbuntuMono-RI.ttf", 50);
     SDL_Color dikr_color = SDL_Color{0, 0, 0};
 
 /*    TTF_SetDirection(HB_DIRECTION_RTL);
@@ -79,7 +80,7 @@ int main(){
             strTo[num_chars] = '\0';
         }
 */
-        SDL_Surface * Surface_Dikr = TTF_RenderUTF8_Blended(Mono, ArDikrVec[chosenDikr], dikr_color);
+        SDL_Surface * Surface_Dikr = TTF_RenderUTF8_Blended(Mono, DikrList[chosenDikr].data(), dikr_color);
         SDL_Texture * DikrTexture = SDL_CreateTextureFromSurface(renderer, Surface_Dikr);
         SDL_Rect Dikr_rect = SDL_Rect{border * 2, border * 2, window_width - (border * 4), window_height - (border * 4)};
 
