@@ -1,7 +1,7 @@
 //بسم الله الرحمن الحيم
 
 #include <SDL.h>
-#include <SDL_ttf.h>
+//#include <SDL_ttf.h>
 
 const char* Dikr_list[][3] = {"بسم الله", "سبحن الله", "الله أكبر"};
 
@@ -10,7 +10,7 @@ int cooldown_time_debug = 3;
 int show_counter = 2; // for debugging
 bool always_show = false; // for debugging
 int screen_width = 0, screen_heigth = 0;
-int window_width = 200, window_height = 100;
+int window_width = 250, window_height = 60;
 
 SDL_Window *window = nullptr;
 SDL_Renderer *renderer = nullptr;
@@ -27,11 +27,11 @@ int main(){
         return -1;
     }
 
-    if(TTF_Init() == -1){
+/*    if(TTF_Init() == -1){
         printf("Error: %s\n", TTF_GetError());
         return -1;
     }
-
+*/
 #ifdef SDL_HINT_IME_SHOW_UI
     SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
 #endif
@@ -70,9 +70,11 @@ void pop_dikr(){
 
 
 
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
 
-
-
+    SDL_RenderPresent(renderer);
+    
     bool running = true;
 
     SDL_Event w_event;
