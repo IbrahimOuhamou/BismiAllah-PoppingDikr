@@ -1,9 +1,10 @@
 //بسم الله الرحمن الحيم
 
 #include <SDL.h>
+#include <SDL_image.h>
 //#include <SDL_ttf.h>
 
-const char* Dikr_list[][3] = {"بسم الله", "سبحن الله", "الله أكبر"};
+//const char* Dikr_list[][3] = {"بسم الله", "سبحن الله", "الله أكبر"};
 
 int cooldown_time = 3;
 int cooldown_time_debug = 3;
@@ -25,6 +26,11 @@ int main(){
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0){
         printf("Error: %s\n", SDL_GetError());
         return -1;
+    }
+
+    if (!IMG_Init(IMG_INIT_PNG))
+    {
+        printf("Eroor: %s\n", IMG_GetError());
     }
 
 /*    if(TTF_Init() == -1){
@@ -68,22 +74,27 @@ void pop_dikr(){
         SDL_Log("Error creating SDL_Renderer!");
     }
 
-
-
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 
-    SDL_RenderPresent(renderer);
+    SDL_Texture* BismiAllah_img = IMG_LoadTexture(renderer, "BismiALlah.png");
+
     
     bool running = true;
 
     SDL_Event w_event;
-    while(running){
-        while(SDL_PollEvent(&w_event)){
-            if(w_event.type == SDL_QUIT || w_event.type == SDL_MOUSEBUTTONDOWN){
+    while(running)
+    {
+        while(SDL_PollEvent(&w_event))
+        {
+            if(w_event.type == SDL_QUIT || w_event.type == SDL_MOUSEBUTTONDOWN)
+            {
                 running = false;
             }
         }
+        SDL_RenderCopy(renderer, BismiAllah_img, NULL, NULL);
+
+        SDL_RenderPresent(renderer);
     }
 }
 
