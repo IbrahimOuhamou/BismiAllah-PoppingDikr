@@ -11,7 +11,7 @@ int cooldown_time_debug = 3;
 int show_counter = 2; // for debugging
 bool always_show = false; // for debugging
 int screen_width = 0, screen_heigth = 0;
-int window_width = 250, window_height = 60;
+int window_width = 250*2, window_height = 2*60;
 
 SDL_Window *window = nullptr;
 SDL_Renderer *renderer = nullptr;
@@ -77,7 +77,8 @@ void pop_dikr(){
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 
-    SDL_Texture* BismiAllah_img = IMG_LoadTexture(renderer, "BismiALlah.png");
+    SDL_Texture* BismiAllah_img = IMG_LoadTexture(renderer, "BismiAllah.png");
+    SDL_RenderCopy(renderer, BismiAllah_img, NULL, NULL);
 
     
     bool running = true;
@@ -92,7 +93,6 @@ void pop_dikr(){
                 running = false;
             }
         }
-        SDL_RenderCopy(renderer, BismiAllah_img, NULL, NULL);
 
         SDL_RenderPresent(renderer);
     }
