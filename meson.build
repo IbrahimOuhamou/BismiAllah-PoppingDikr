@@ -7,6 +7,7 @@ sdl_dep = [
     dependency('sdl2'),
     dependency('sdl2_ttf'),
     dependency('sdl2_image')
+#    dependency('harfbuzz')
 ]
 
 Dikr_files = [
