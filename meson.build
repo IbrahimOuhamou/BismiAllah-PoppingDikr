@@ -5,17 +5,12 @@ project('Dikr', 'cpp',
 
 sdl_dep = [
     dependency('sdl2'),
-    dependency('sdl2_ttf'),
-    dependency('sdl2_image')
-]
-
-Dikr_files = [
-    'Dikr_exe/main.cpp'
+    dependency('sdl2_ttf')
 ]
 
 executable('BismiAllah',
-            Dikr_files,
-            dependencies: sdl_dep)
+          'Dikr_exe/main.cpp',
+           dependencies: sdl_dep)
 
 executable('BismiAllah1',
             'Dikr_exe/main1.cpp',
