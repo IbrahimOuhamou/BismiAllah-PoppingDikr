@@ -2,9 +2,11 @@
 
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <string>
 
 //const char* Dikr_list[][3] = {"بسم الله", "سبحن الله", "الله أكبر"};
 
+// window variables
 int cooldown_time = 3;
 int cooldown_time_debug = 3;
 int show_counter = 2; // for debugging
@@ -15,16 +17,46 @@ int window_width = 250, window_height = 60;
 SDL_Window *window = nullptr;
 SDL_Renderer *renderer = nullptr;
 
-TTF_Font* dikr_font = NULL;
-int font_size = 60;
+// Dikr variables
+SDL_Texture *Dikr_Texture = nullptr;
+SDL_Color Dikr_color = SDL_Color{0, 0, 0};
 
-const char* dikr_font_arr[1] = {
+TTF_Font* Dikr_font = NULL;
+
+int font_size = 60;
+short selected_Dikr = 0;
+
+const char* Dikr_font_arr_ar[1] = {
   "/usr/share/fonts/truetype/kacst/KacstPoster.ttf"
 };
 
-void init();
+std::string Dikr_list_en[3] = {
+  "BismiALlah",
+  "Sub7ana Allah",
+  "Allah Akbar"
+};
+
+/*
+  word in hex format for Arabic
+  Allah : \uFEEA\uFEE0\uFEDF\uFE8D
+ Mohammed: \uFEAA\uFEE4\uFEA4\uFEE3
+  Bismi : \uFEE2\uFEB4\uFE91
+  Sub7an : \uFEE6\uFEA4\uFE92\uFEB3
+  salla : \uFEF0\uFEE0\uFEBB
+  ala: \uFEF0\uFEE0\uFECB
+
+*/
+
+std::string Dikr_list_ar[3] = {
+  u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEE2\uFEB4\uFE91", //BismiAllah
+  u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEE6\uFEA4\uFE92\uFEB3", //Sub7ana Allah
+  u8"\uFEAA\uFEE4\uFEA4\uFEE3 \uFEF0\uFEE0\uFECB \uFEEA\uFEE0\uFEDF\uFE8D \uFEF0\uFEE0\uFEBB" // salla Allah ala Mohammed
+};
+
+void initialize();
 void load_font();
-void pop_dikr();
+void make_Dikr_texture();
+void pop_Dikr();
 void clean_up();
 void cooldown();
 
@@ -46,10 +78,11 @@ int main(){
     SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
 #endif
 
-    init();
+    initialize();
+    load_font();
 
     while(show_counter > 0){
-        pop_dikr();
+        pop_Dikr();
         
         show_counter--;
         
@@ -62,15 +95,17 @@ int main(){
     SDL_Quit();
 }
 
-void init(){
+void initialize(){
     //get screen resolution
     SDL_DisplayMode DM;
     SDL_GetCurrentDisplayMode(0, &DM);
     screen_heigth = DM.h;
     screen_width = DM.w;
+
+    srand(time(NULL));
 }
 
-void pop_dikr(){
+void pop_Dikr(){
     window = SDL_CreateWindow("Dikr", screen_width - window_width, screen_heigth * 3 / 10, window_width, window_height, SDL_WINDOW_POPUP_MENU);
     renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -78,12 +113,14 @@ void pop_dikr(){
         SDL_Log("Error creating SDL_Renderer!");
     }
 
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderClear(renderer);
-
-    
+    make_Dikr_texture();    
     
     bool running = true;
+    
+    if(NULL == Dikr_Texture || NULL == Dikr_font)
+    {
+      return;
+    }
 
     SDL_Event w_event;
     while(running)
@@ -95,14 +132,23 @@ void pop_dikr(){
                 running = false;
             }
         }
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        //clear window
+        SDL_SetRenderDrawColor(renderer, 55, 255, 255, 255);
         SDL_RenderClear(renderer);
+        
+        //Draw Dikr
+        if(nullptr != Dikr_Texture)
+        {
+          SDL_RenderCopy(renderer, Dikr_Texture, NULL, NULL);
+        }
+
 
         SDL_RenderPresent(renderer);
     }
 }
 
 void clean_up(){
+    SDL_DestroyTexture(Dikr_Texture);
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 }
@@ -111,8 +157,8 @@ void load_font()
 {
   for (int i = 0; i < 1; i++) 
   {
-    dikr_font = TTF_OpenFont(dikr_font_arr[i] ,font_size);
-    if (NULL != dikr_font)
+    Dikr_font = TTF_OpenFont(Dikr_font_arr_ar[i] ,font_size);
+    if (NULL != Dikr_font)
     {
       return;
     }
@@ -120,10 +166,31 @@ void load_font()
 
 }
 
-void cooldown(){
+void cooldown()
+{
     int waited_time = 0;
     while(waited_time < cooldown_time){
         SDL_Delay(60 * 1000);
         waited_time++;
     }
 }
+
+void make_Dikr_texture()
+{
+  if(NULL == Dikr_font)
+  {
+    load_font();
+  }
+  if(NULL == Dikr_font)
+  {
+    return;
+  }
+
+  selected_Dikr = rand() % 3;
+
+  SDL_Surface * Dikr_Surface = TTF_RenderUTF8_Blended(Dikr_font, Dikr_list_ar[selected_Dikr].data(), Dikr_color);
+  Dikr_Texture = SDL_CreateTextureFromSurface(renderer, Dikr_Surface);
+
+  SDL_FreeSurface(Dikr_Surface);
+}
+
