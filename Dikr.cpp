@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <string>
-
+#include <istream>
 
 //const char* Dikr_list[][3] = {"بسم الله", "سبحن الله", "الله أكبر"};
 
@@ -66,6 +66,7 @@ std::string Dikr_list_ar[5] = {
 };
 
 void initialize();
+void load_settings();
 void load_font();
 void make_Dikr_texture();
 void pop_Dikr();
@@ -114,6 +115,7 @@ void initialize(){
     screen_heigth = DM.h;
     screen_width = DM.w;
 
+    load_settings();
     srand(time(NULL));
 }
 
@@ -180,11 +182,12 @@ void load_font()
 
 void cooldown()
 {
-    int waited_time = 0;
-    while(waited_time < cooldown_time){
-        SDL_Delay(60 * 1000);
-        waited_time++;
-    }
+  int waited_time = 0;
+  while(waited_time < cooldown_time){
+    SDL_Delay(60 * 1000);
+    waited_time++;
+  }
+  load_settings();
 }
 
 void make_Dikr_texture()
@@ -206,3 +209,8 @@ void make_Dikr_texture()
   SDL_FreeSurface(Dikr_Surface);
 }
 
+void load_settings(){
+/*
+
+*/
+}
