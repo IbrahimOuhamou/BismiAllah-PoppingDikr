@@ -16,6 +16,10 @@ executable('BismiAllah1',
             'Dikr_exe/main1.cpp',
             dependencies: sdl_dep)
 
+executable('PoppingDikr',
+            'popping_Dikr.cpp',
+            dependencies: sdl_dep)
+
 Settings_files = [
     'settings_exe/main.cpp'
 ]
