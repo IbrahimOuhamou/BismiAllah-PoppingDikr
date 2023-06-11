@@ -8,14 +8,6 @@ sdl_dep = [
     dependency('sdl2_ttf')
 ]
 
-executable('BismiAllah',
-          'Dikr_exe/main.cpp',
-           dependencies: sdl_dep)
-
-executable('BismiAllah1',
-            'Dikr_exe/main1.cpp',
-            dependencies: sdl_dep)
-
 executable('PoppingDikr',
             'Dikr.cpp',
             dependencies: sdl_dep)

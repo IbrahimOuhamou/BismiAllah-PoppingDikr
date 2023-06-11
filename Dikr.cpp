@@ -54,7 +54,7 @@ std::string Dikr_list_en[3] = {
 
   salla : \uFEF0\uFEE0\uFEBB
   ala : \uFEF0\uFEE0\uFECB
-  la : \uFE8D\uFEDF
+  la : ﻼ
 */
 
 std::string Dikr_list_ar[5] = {
@@ -62,7 +62,7 @@ std::string Dikr_list_ar[5] = {
   u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEE6\uFEA4\uFE92\uFEB3", //Sub7ana Allah
   u8"\uFEAA\uFEE4\uFEA4\uFEE3 \uFEF0\uFEE0\uFECB \uFEEA\uFEE0\uFEDF\uFE8D \uFEF0\uFEE0\uFEBB", // salla Allah ala Mohammed
   u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEAE\uFED4\uFED0\uFE98\uFEB3أ", //astaghfiro Allah
-  u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFE8D\uFEDFإ \uFEEA\uFEDFإ \uFE8D\uFEDF" //la ilaha illa Allah
+  u8"\uFEEA\uFEE0\uFEDF\uFE8D ﻼإ \uFEEA\uFEDFإ ﻼ" //la ilaha illa Allah
 };
 
 void initialize();
