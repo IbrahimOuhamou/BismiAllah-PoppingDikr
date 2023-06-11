@@ -45,19 +45,24 @@ std::string Dikr_list_en[3] = {
 /*
   word in hex format for Arabic
   Allah : \uFEEA\uFEE0\uFEDF\uFE8D
-  ilaha : \uFEEA\uFEDF\u
+  ilaha : \uFEEA\uFEDFإ
  Mohammed: \uFEAA\uFEE4\uFEA4\uFEE3
+
   Bismi : \uFEE2\uFEB4\uFE91
   Sub7an : \uFEE6\uFEA4\uFE92\uFEB3
-  salla : \uFEF0\uFEE0\uFEBB
-  ala: \uFEF0\uFEE0\uFECB
+  Astaghfiro : \uFEAE\uFED4\uFED0\uFE98\uFEB3 أ
 
+  salla : \uFEF0\uFEE0\uFEBB
+  ala : \uFEF0\uFEE0\uFECB
+  la : \uFE8D\uFEDF
 */
 
-std::string Dikr_list_ar[3] = {
+std::string Dikr_list_ar[5] = {
   u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEE2\uFEB4\uFE91", //BismiAllah
   u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEE6\uFEA4\uFE92\uFEB3", //Sub7ana Allah
-  u8"\uFEAA\uFEE4\uFEA4\uFEE3 \uFEF0\uFEE0\uFECB \uFEEA\uFEE0\uFEDF\uFE8D \uFEF0\uFEE0\uFEBB" // salla Allah ala Mohammed
+  u8"\uFEAA\uFEE4\uFEA4\uFEE3 \uFEF0\uFEE0\uFECB \uFEEA\uFEE0\uFEDF\uFE8D \uFEF0\uFEE0\uFEBB", // salla Allah ala Mohammed
+  u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEAE\uFED4\uFED0\uFE98\uFEB3أ", //astaghfiro Allah
+  u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFE8D\uFEDFإ \uFEEA\uFEDFإ \uFE8D\uFEDF" //la ilaha illa Allah
 };
 
 void initialize();
@@ -193,7 +198,7 @@ void make_Dikr_texture()
     return;
   }
 
-  selected_Dikr = rand() % 3;
+  selected_Dikr = rand() % 5;
 
   SDL_Surface * Dikr_Surface = TTF_RenderUTF8_Blended(Dikr_font, Dikr_list_ar[selected_Dikr].data(), Dikr_color);
   Dikr_Texture = SDL_CreateTextureFromSurface(renderer, Dikr_Surface);
