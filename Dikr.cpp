@@ -13,7 +13,7 @@ bool running = true;
 int cooldown_time = 3;
 int show_counter = 2; // for debugging
 short cooldown_time_debug = 2;
-bool always_show = false; // for debugging
+bool always_show = true; // for debugging
 bool debugging = false;
 int screen_width = 0, screen_heigth = 0;
 int window_width = 250, window_height = 60;
