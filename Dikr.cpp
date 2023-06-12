@@ -4,15 +4,17 @@
 #include <SDL_ttf.h>
 #include <string>
 #include <fstream>
+#include <thread>
 
-//const char* Dikr_list[][3] = {"بسم الله", "سبحن الله", "الله أكبر"};
+//
+bool running = true;
 
 // window variables
 int cooldown_time = 3;
 int show_counter = 2; // for debugging
 short cooldown_time_debug = 2;
 bool always_show = false; // for debugging
-bool debugging = true;
+bool debugging = false;
 int screen_width = 0, screen_heigth = 0;
 int window_width = 250, window_height = 60;
 
@@ -46,7 +48,7 @@ std::string Dikr_list_en[3] = {
 };
 
 
-//  word in hex format for Arabic
+/*  word in hex format for Arabic
 #define _Allah \uFEEA\uFEE0\uFEDF\uFE8D
 #define _Ilaha \uFEEA\uFEDFإ
 #define _Mohammed \uFEAA\uFEE4\uFEA4\uFEE3
@@ -59,6 +61,7 @@ std::string Dikr_list_en[3] = {
 #define _ala \uFEF0\uFEE0\uFECB
 #define _la ﻼ
 #define _illa لاإ
+*/
 
 std::string Dikr_list_ar[5] = {
   u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEE2\uFEB4\uFE91", //BismiAllah
@@ -75,6 +78,8 @@ void make_Dikr_texture();
 void pop_Dikr();
 void clean_up();
 void cooldown();
+
+void periodicly_load_settings();
 
 int main(){
 
@@ -97,23 +102,27 @@ int main(){
     initialize();
     load_font();
 
-    while(always_show || show_counter > 0){
+    std::thread timer_to_settings (periodicly_load_settings);
+
+    int showed_times = 0;
+    while(always_show || show_counter > showed_times){
         pop_Dikr();
         
-        show_counter--;
+        showed_times++;
         
         clean_up();
-        if(debugging)
+
+        if(debugging && show_counter > showed_times)
         {
           SDL_Delay(cooldown_time_debug * 1000);
         }
-        else
+        else if (show_counter > 0)
         {
           cooldown();
         }
     }
-
-
+    running = false;
+    timer_to_settings.join();
     SDL_Quit();
 }
 
@@ -196,7 +205,6 @@ void cooldown()
     SDL_Delay(6000);
     waited_time++;
   }
-  load_settings();
 }
 
 void make_Dikr_texture()
@@ -245,5 +253,22 @@ void load_settings(){
       Dikr_color.b = Dikr_b;
     }
 
+    bool f_always_show = always_show;
+    int f_show_counter = show_counter;
+    if(SettingsFile >> f_always_show && SettingsFile >> f_show_counter)
+    {
+      always_show = f_always_show;
+      show_counter = f_show_counter;
+    }
+
+    SettingsFile.close();
+  }
+}
+
+void periodicly_load_settings(){
+  while(running)
+  {
+    SDL_Delay(300000);
+    load_settings();
   }
 }
