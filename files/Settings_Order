@@ -1,0 +1,8 @@
+BismiAllah:
+
+int cooldown_time //seconds
+SDL_Color bg_color{..., ..., ...}
+SDL_Color Dikr_color{..., ..., ...}
+
+bool always_show
+

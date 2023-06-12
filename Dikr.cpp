@@ -3,17 +3,20 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <string>
-#include <istream>
+#include <fstream>
 
 //const char* Dikr_list[][3] = {"بسم الله", "سبحن الله", "الله أكبر"};
 
 // window variables
 int cooldown_time = 3;
-int cooldown_time_debug = 3;
 int show_counter = 2; // for debugging
+short cooldown_time_debug = 2;
 bool always_show = false; // for debugging
+bool debugging = true;
 int screen_width = 0, screen_heigth = 0;
 int window_width = 250, window_height = 60;
+
+SDL_Color BG_color = SDL_Color{255, 255, 255};
 
 SDL_Window *window = nullptr;
 SDL_Renderer *renderer = nullptr;
@@ -42,27 +45,27 @@ std::string Dikr_list_en[3] = {
   "Allah Akbar"
 };
 
-/*
-  word in hex format for Arabic
-  Allah : \uFEEA\uFEE0\uFEDF\uFE8D
-  ilaha : \uFEEA\uFEDFإ
- Mohammed: \uFEAA\uFEE4\uFEA4\uFEE3
 
-  Bismi : \uFEE2\uFEB4\uFE91
-  Sub7an : \uFEE6\uFEA4\uFE92\uFEB3
-  Astaghfiro : \uFEAE\uFED4\uFED0\uFE98\uFEB3 أ
+//  word in hex format for Arabic
+#define _Allah \uFEEA\uFEE0\uFEDF\uFE8D
+#define _Ilaha \uFEEA\uFEDFإ
+#define _Mohammed \uFEAA\uFEE4\uFEA4\uFEE3
 
-  salla : \uFEF0\uFEE0\uFEBB
-  ala : \uFEF0\uFEE0\uFECB
-  la : ﻼ
-*/
+#define _Bismi \uFEE2\uFEB4\uFE91
+#define _Sub7an \uFEE6\uFEA4\uFE92\uFEB3
+#define _Astaghfiro \uFEAE\uFED4\uFED0\uFE98\uFEB3أ
+
+#define _salla \uFEF0\uFEE0\uFEBB
+#define _ala \uFEF0\uFEE0\uFECB
+#define _la ﻼ
+#define _illa لاإ
 
 std::string Dikr_list_ar[5] = {
   u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEE2\uFEB4\uFE91", //BismiAllah
   u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEE6\uFEA4\uFE92\uFEB3", //Sub7ana Allah
   u8"\uFEAA\uFEE4\uFEA4\uFEE3 \uFEF0\uFEE0\uFECB \uFEEA\uFEE0\uFEDF\uFE8D \uFEF0\uFEE0\uFEBB", // salla Allah ala Mohammed
   u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEAE\uFED4\uFED0\uFE98\uFEB3أ", //astaghfiro Allah
-  u8"\uFEEA\uFEE0\uFEDF\uFE8D ﻼإ \uFEEA\uFEDFإ ﻼ" //la ilaha illa Allah
+  u8"\uFEEA\uFEE0\uFEDF\uFE8D لاإ \uFEEA\uFEDFإ ﻼ" //la ilaha illa Allah
 };
 
 void initialize();
@@ -94,14 +97,20 @@ int main(){
     initialize();
     load_font();
 
-    while(show_counter > 0){
+    while(always_show || show_counter > 0){
         pop_Dikr();
         
         show_counter--;
         
         clean_up();
-
-        SDL_Delay(cooldown_time_debug * 1000);
+        if(debugging)
+        {
+          SDL_Delay(cooldown_time_debug * 1000);
+        }
+        else
+        {
+          cooldown();
+        }
     }
 
 
@@ -147,7 +156,7 @@ void pop_Dikr(){
             }
         }
         //clear window
-        SDL_SetRenderDrawColor(renderer, 55, 255, 255, 255);
+        SDL_SetRenderDrawColor(renderer, BG_color.r, BG_color.g, BG_color.b, 255);
         SDL_RenderClear(renderer);
         
         //Draw Dikr
@@ -184,7 +193,7 @@ void cooldown()
 {
   int waited_time = 0;
   while(waited_time < cooldown_time){
-    SDL_Delay(60 * 1000);
+    SDL_Delay(6000);
     waited_time++;
   }
   load_settings();
@@ -210,7 +219,31 @@ void make_Dikr_texture()
 }
 
 void load_settings(){
-/*
+  std::ifstream SettingsFile;
+  SettingsFile.open("files/Settings", std::ifstream::in);
+  if(SettingsFile.is_open())
+  {
+    int f_cooldown_time = f_cooldown_time;
+    if(SettingsFile >> f_cooldown_time)
+    {
+      f_cooldown_time = f_cooldown_time;
+    }
 
-*/
+    int bg_r = BG_color.r, bg_g = BG_color.g, bg_b = BG_color.b;
+    if(SettingsFile >> bg_r && SettingsFile >> bg_g && SettingsFile >> bg_b)
+    {
+      BG_color.r = bg_r;
+      BG_color.g = bg_g;
+      BG_color.b = bg_b;
+    }
+
+    int Dikr_r = Dikr_color.r, Dikr_g = Dikr_color.g, Dikr_b = Dikr_color.b;
+    if(SettingsFile >> Dikr_r && SettingsFile >> Dikr_g && SettingsFile >> Dikr_b)
+    {
+      Dikr_color.r = Dikr_r;
+      Dikr_color.g = Dikr_g;
+      Dikr_color.b = Dikr_b;
+    }
+
+  }
 }
