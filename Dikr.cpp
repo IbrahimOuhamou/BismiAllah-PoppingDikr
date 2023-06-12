@@ -202,7 +202,7 @@ void cooldown()
 {
   int waited_time = 0;
   while(waited_time < cooldown_time){
-    SDL_Delay(6000);
+    SDL_Delay(60000);
     waited_time++;
   }
 }
