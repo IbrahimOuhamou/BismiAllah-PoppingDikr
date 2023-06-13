@@ -4,17 +4,12 @@
 #include <SDL_ttf.h>
 #include <string>
 #include <fstream>
-#include <thread>
 
 //
 bool running = true;
 
 // window variables
-int cooldown_time = 3;
-int show_counter = 2; // for debugging
-short cooldown_time_debug = 2;
-bool always_show = true; // for debugging
-bool debugging = false;
+int cooldown_minutes = 1;
 int screen_width = 0, screen_heigth = 0;
 int window_width = 250, window_height = 60;
 
@@ -79,10 +74,7 @@ void pop_Dikr();
 void clean_up();
 void cooldown();
 
-void periodicly_load_settings();
-
 int main(){
-
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0){
         printf("Error: %s\n", SDL_GetError());
         return -1;
@@ -102,27 +94,13 @@ int main(){
     initialize();
     load_font();
 
-    std::thread timer_to_settings (periodicly_load_settings);
-
-    int showed_times = 0;
-    while(always_show || show_counter > showed_times){
-        pop_Dikr();
-        
-        showed_times++;
-        
-        clean_up();
-
-        if(debugging && show_counter > showed_times)
-        {
-          SDL_Delay(cooldown_time_debug * 1000);
-        }
-        else if (show_counter > 0)
-        {
-          cooldown();
-        }
+    while(running)
+    {
+      pop_Dikr();
+      clean_up();
+      cooldown();
     }
-    running = false;
-    timer_to_settings.join();
+
     SDL_Quit();
 }
 
@@ -138,6 +116,8 @@ void initialize(){
 }
 
 void pop_Dikr(){
+  load_settings();
+
     window = SDL_CreateWindow("Dikr", screen_width - window_width, screen_heigth * 3 / 10, window_width, window_height, SDL_WINDOW_POPUP_MENU);
     renderer = SDL_CreateRenderer(window, -1, 0);
 
@@ -147,7 +127,7 @@ void pop_Dikr(){
 
     make_Dikr_texture();    
     
-    bool running = true;
+    bool w_running = true;
     
     if(NULL == Dikr_Texture || NULL == Dikr_font)
     {
@@ -155,13 +135,13 @@ void pop_Dikr(){
     }
 
     SDL_Event w_event;
-    while(running)
+    while(w_running)
     {
         while(SDL_PollEvent(&w_event))
         {
             if(w_event.type == SDL_QUIT || w_event.type == SDL_MOUSEBUTTONDOWN)
             {
-                running = false;
+                w_running = false;
             }
         }
         //clear window
@@ -200,11 +180,7 @@ void load_font()
 
 void cooldown()
 {
-  int waited_time = 0;
-  while(waited_time < cooldown_time){
-    SDL_Delay(60000);
-    waited_time++;
-  }
+   SDL_Delay(cooldown_minutes * 60 * 1000);
 }
 
 void make_Dikr_texture()
@@ -231,10 +207,10 @@ void load_settings(){
   SettingsFile.open("files/Settings", std::ifstream::in);
   if(SettingsFile.is_open())
   {
-    int f_cooldown_time = f_cooldown_time;
+    int f_cooldown_time = cooldown_minutes;
     if(SettingsFile >> f_cooldown_time)
     {
-      f_cooldown_time = f_cooldown_time;
+      cooldown_minutes = f_cooldown_time;
     }
 
     int bg_r = BG_color.r, bg_g = BG_color.g, bg_b = BG_color.b;
@@ -252,23 +228,6 @@ void load_settings(){
       Dikr_color.g = Dikr_g;
       Dikr_color.b = Dikr_b;
     }
-
-    bool f_always_show = always_show;
-    int f_show_counter = show_counter;
-    if(SettingsFile >> f_always_show && SettingsFile >> f_show_counter)
-    {
-      always_show = f_always_show;
-      show_counter = f_show_counter;
-    }
-
     SettingsFile.close();
-  }
-}
-
-void periodicly_load_settings(){
-  while(running)
-  {
-    SDL_Delay(300000);
-    load_settings();
   }
 }
