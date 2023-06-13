@@ -98,7 +98,8 @@ int main()
 
 void show_settings()
 {
-  ImGui::Begin("BismiAllah");
+  ImGui::SetNextWindowPos(ImVec2{0, 0});
+  ImGui::Begin("BismiAllah", NULL, ImGuiWindowFlags_NoTitleBar);
   
   ImGui::SliderInt("cooldown minutes", &cooldown_minutes, 0 ,10);
 
