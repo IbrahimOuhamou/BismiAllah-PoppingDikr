@@ -4,8 +4,9 @@
 #include <fstream>
 
 int cooldown_minutes = 0;
-SDL_Color bg_color = SDL_Color{255, 255, 255};
-SDL_Color Dikr_color = SDL_Color{0, 0, 0};
+
+float BG_color[3] = {0,0,0};
+float Dikr_color[3] = {0,0,0};
 
 void read_settings();
 void write_settings();
@@ -49,6 +50,8 @@ int main()
     ImGui_ImplSDLRenderer_Init(renderer);
 
     ImVec4 clear_color = ImVec4(0.0f, 0.0f, 0.0f, 1.00f);
+
+    read_settings();
 
     // Main loop
     bool done = false;
@@ -97,7 +100,10 @@ void show_settings()
 {
   ImGui::Begin("BismiAllah");
   
-  ImGui::SliderInt("BismiAllah num", &cooldown_minutes, 0 ,10);
+  ImGui::SliderInt("cooldown minutes", &cooldown_minutes, 0 ,10);
+
+  ImGui::ColorEdit3("Background Color", BG_color);
+  ImGui::ColorEdit3("Dikr Color", Dikr_color);
 
   if(ImGui::Button("save"))
   {
@@ -109,10 +115,44 @@ void show_settings()
 }
 
 void read_settings(){
+  std::ifstream SettingsFile;
+  SettingsFile.open("files/Settings", std::ifstream::in);
+  if(SettingsFile.is_open())
+  {
+    int f_cooldown_time = cooldown_minutes;
+    if(SettingsFile >> f_cooldown_time)
+    {
+      cooldown_minutes = f_cooldown_time;
+    }
+
+    int bg_r = BG_color[0], bg_g = BG_color[1], bg_b = BG_color[2];
+    if(SettingsFile >> bg_r && SettingsFile >> bg_g && SettingsFile >> bg_b)
+    {
+      BG_color[0] = bg_r / 255;
+      BG_color[1] = bg_g / 255;
+      BG_color[2] = bg_b / 255;
+    }
+
+    int Dikr_r = Dikr_color[0], Dikr_g = Dikr_color[1], Dikr_b = Dikr_color[2];
+    if(SettingsFile >> Dikr_r && SettingsFile >> Dikr_g && SettingsFile >> Dikr_b)
+    {
+      Dikr_color[0] = Dikr_r / 255;
+      Dikr_color[1] = Dikr_g / 255;
+      Dikr_color[2] = Dikr_b / 255;
+    }
+    SettingsFile.close();
+  }
 }
 
 void write_settings()
 {
+  std::ofstream SettingsFile;
+  SettingsFile.open("files/Settings");
+
+  SettingsFile << cooldown_minutes << '\n';
+  SettingsFile << int(BG_color[0] * 255) << ' ' << int(BG_color[1] * 255) << ' ' << int(BG_color[2] * 255) << '\n';
+  SettingsFile << int(Dikr_color[0] * 255) << ' ' << int(Dikr_color[1] * 255) << ' ' << int(Dikr_color[2] * 255) << '\n';
+  SettingsFile.close();
 
 }
 

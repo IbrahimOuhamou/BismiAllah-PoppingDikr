@@ -207,10 +207,10 @@ void load_settings(){
   SettingsFile.open("files/Settings", std::ifstream::in);
   if(SettingsFile.is_open())
   {
-    int f_cooldown_time = f_cooldown_time;
+    int f_cooldown_time = cooldown_minutes;
     if(SettingsFile >> f_cooldown_time)
     {
-      f_cooldown_time = f_cooldown_time;
+      cooldown_minutes = f_cooldown_time;
     }
 
     int bg_r = BG_color.r, bg_g = BG_color.g, bg_b = BG_color.b;
