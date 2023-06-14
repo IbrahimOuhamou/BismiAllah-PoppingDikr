@@ -98,6 +98,7 @@ int main(){
     {
       pop_Dikr();
       clean_up();
+      load_settings();
       cooldown();
     }
 

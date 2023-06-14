@@ -8,6 +8,8 @@ int cooldown_minutes = 0;
 float BG_color[3] = {0,0,0};
 float Dikr_color[3] = {0,0,0};
 
+bool error_loading_settings = false;
+
 void read_settings();
 void write_settings();
 void show_settings();
@@ -101,14 +103,24 @@ void show_settings()
   ImGui::SetNextWindowPos(ImVec2{0, 0});
   ImGui::Begin("BismiAllah", NULL, ImGuiWindowFlags_NoTitleBar);
   
-  ImGui::SliderInt("cooldown minutes", &cooldown_minutes, 0 ,10);
+
+  ImGui::SliderInt("cooldown minutes", &cooldown_minutes, 1 ,60);
 
   ImGui::ColorEdit3("Background Color", BG_color);
   ImGui::ColorEdit3("Dikr Color", Dikr_color);
 
+  if(error_loading_settings)
+  {
+    ImGui::TextColored(ImVec4(1, 1, 0, 1) ,"error reading files!");
+  }
+
+  if(ImGui::Button("reload settings"))
+  {
+    read_settings();
+  }
+
   if(ImGui::Button("save"))
   {
-    cooldown_minutes = 5;
     write_settings();
   }
 
@@ -120,6 +132,7 @@ void read_settings(){
   SettingsFile.open("files/Settings", std::ifstream::in);
   if(SettingsFile.is_open())
   {
+    BG_color[0] = 0.5f;
     int f_cooldown_time = cooldown_minutes;
     if(SettingsFile >> f_cooldown_time)
     {
@@ -142,6 +155,11 @@ void read_settings(){
       Dikr_color[2] = Dikr_b / 255;
     }
     SettingsFile.close();
+    error_loading_settings = false;
+  }
+  else
+  {
+    error_loading_settings = true;
   }
 }
 
