@@ -3,6 +3,7 @@
 #include "imgui_SDL_includes.h"
 #include <fstream>
 
+
 int cooldown_minutes = 0;
 
 float BG_color[3] = {0,0,0};
@@ -132,14 +133,13 @@ void read_settings(){
   SettingsFile.open("files/Settings", std::ifstream::in);
   if(SettingsFile.is_open())
   {
-    BG_color[0] = 0.5f;
     int f_cooldown_time = cooldown_minutes;
     if(SettingsFile >> f_cooldown_time)
     {
       cooldown_minutes = f_cooldown_time;
     }
 
-    int bg_r = BG_color[0], bg_g = BG_color[1], bg_b = BG_color[2];
+    float bg_r = 0, bg_g = 0, bg_b = 0;
     if(SettingsFile >> bg_r && SettingsFile >> bg_g && SettingsFile >> bg_b)
     {
       BG_color[0] = bg_r / 255;
@@ -147,7 +147,7 @@ void read_settings(){
       BG_color[2] = bg_b / 255;
     }
 
-    int Dikr_r = Dikr_color[0], Dikr_g = Dikr_color[1], Dikr_b = Dikr_color[2];
+    float Dikr_r = 0, Dikr_g = 0, Dikr_b = 0;
     if(SettingsFile >> Dikr_r && SettingsFile >> Dikr_g && SettingsFile >> Dikr_b)
     {
       Dikr_color[0] = Dikr_r / 255;
