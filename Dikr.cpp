@@ -63,7 +63,7 @@ std::string Dikr_list_ar[5] = {
   u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEE6\uFEA4\uFE92\uFEB3", //Sub7ana Allah
   u8"\uFEAA\uFEE4\uFEA4\uFEE3 \uFEF0\uFEE0\uFECB \uFEEA\uFEE0\uFEDF\uFE8D \uFEF0\uFEE0\uFEBB", // salla Allah ala Mohammed
   u8"\uFEEA\uFEE0\uFEDF\uFE8D \uFEAE\uFED4\uFED0\uFE98\uFEB3أ", //astaghfiro Allah
-  u8"\uFEEA\uFEE0\uFEDF\uFE8D لاإ \uFEEA\uFEDFإ ﻼ" //la ilaha illa Allah
+  u8"\uFEEA\uFEE0\uFEDF\uFE8D ﻻإ \uFEEA\uFEDFإ ﻻ" //la ilaha illa Allah
 };
 
 void initialize();
@@ -98,6 +98,7 @@ int main(){
     {
       pop_Dikr();
       clean_up();
+      load_settings();
       cooldown();
     }
 

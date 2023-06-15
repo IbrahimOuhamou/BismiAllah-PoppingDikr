@@ -3,10 +3,13 @@
 #include "imgui_SDL_includes.h"
 #include <fstream>
 
+
 int cooldown_minutes = 0;
 
 float BG_color[3] = {0,0,0};
 float Dikr_color[3] = {0,0,0};
+
+bool error_loading_settings = false;
 
 void read_settings();
 void write_settings();
@@ -98,16 +101,27 @@ int main()
 
 void show_settings()
 {
-  ImGui::Begin("BismiAllah");
+  ImGui::SetNextWindowPos(ImVec2{0, 0});
+  ImGui::Begin("BismiAllah", NULL, ImGuiWindowFlags_NoTitleBar);
   
-  ImGui::SliderInt("cooldown minutes", &cooldown_minutes, 0 ,10);
+
+  ImGui::SliderInt("cooldown minutes", &cooldown_minutes, 1 ,60);
 
   ImGui::ColorEdit3("Background Color", BG_color);
   ImGui::ColorEdit3("Dikr Color", Dikr_color);
 
+  if(error_loading_settings)
+  {
+    ImGui::TextColored(ImVec4(1, 1, 0, 1) ,"error reading files!");
+  }
+
+  if(ImGui::Button("reload settings"))
+  {
+    read_settings();
+  }
+
   if(ImGui::Button("save"))
   {
-    cooldown_minutes = 5;
     write_settings();
   }
 
@@ -125,7 +139,7 @@ void read_settings(){
       cooldown_minutes = f_cooldown_time;
     }
 
-    int bg_r = BG_color[0], bg_g = BG_color[1], bg_b = BG_color[2];
+    float bg_r = 0, bg_g = 0, bg_b = 0;
     if(SettingsFile >> bg_r && SettingsFile >> bg_g && SettingsFile >> bg_b)
     {
       BG_color[0] = bg_r / 255;
@@ -133,7 +147,7 @@ void read_settings(){
       BG_color[2] = bg_b / 255;
     }
 
-    int Dikr_r = Dikr_color[0], Dikr_g = Dikr_color[1], Dikr_b = Dikr_color[2];
+    float Dikr_r = 0, Dikr_g = 0, Dikr_b = 0;
     if(SettingsFile >> Dikr_r && SettingsFile >> Dikr_g && SettingsFile >> Dikr_b)
     {
       Dikr_color[0] = Dikr_r / 255;
@@ -141,6 +155,11 @@ void read_settings(){
       Dikr_color[2] = Dikr_b / 255;
     }
     SettingsFile.close();
+    error_loading_settings = false;
+  }
+  else
+  {
+    error_loading_settings = true;
   }
 }
 
