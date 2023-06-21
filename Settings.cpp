@@ -3,6 +3,8 @@
 #include "imgui_SDL_includes.h"
 #include <fstream>
 
+#include <iostream>
+#include <filesystem>
 
 int cooldown_minutes = 0;
 
